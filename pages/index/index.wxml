@@ -1,0 +1,66 @@
+<view class="content" style="width:{{winWidth}}px;height:{{winHeight}}px" bindtap="closeAct">
+	<image src="{{bgImg}}"></image>
+	<view class='wrap'>
+		<block wx:for="{{eleList}}" wx:key="index">
+			<view class='wrap_box' style='transform: scale({{item.scale}});top:{{item.top}}px;left:{{item.left}}px;'>
+				<view class='wrap_main {{item.active? "active":""}}' style="transform: rotate({{item.angle}}deg)">
+					<image wx:if="{{item.type == 'img'}}" src='{{item.image}}' data-index='{{index}}'
+						style='width:{{item.width}}px;height:{{item.height}}px;' catchtap="wrapTouchStart"
+						bindtouchstart='wrapTouchStart' bindtouchmove='wrapTouchMove'>
+					</image>
+					<view class="wrap_text" wx:if="{{item.type == 'text'}}" data-index='{{index}}'
+						style='width:{{item.width}}px;height:{{item.height}}px;' catchtap="wrapTouchStart"
+						bindtouchstart='wrapTouchStart' bindtouchmove='wrapTouchMove'>
+						{{item.text}}
+					</view>
+					<view class="delete" wx:if="{{item.active}}" data-index='{{index}}' catchtap='deleteEle'>
+						<image mode="widthFix" src='../../utils/static/po_2.png'
+							style='transform: scale({{item.oScale}})'>
+						</image>
+					</view>
+					<view class="refresh" wx:if="{{item.active && item.type == 'img'}}" data-index='{{index}}'
+						bindtouchstart='oTouchStart' bindtouchmove='oTouchMove'>
+						<image mode="widthFix" src='../../utils/static/po_1.png'
+							style='transform: scale({{item.oScale}})'></image>
+					</view>
+					<view class="modify" wx:if="{{item.active && item.type == 'text'}}" data-index='{{index}}'
+						catchtap="modifyText">
+						<image mode="widthFix" src='../../utils/static/po_3.png'
+							style='transform: scale({{item.oScale}})'></image>
+					</view>
+				</view>
+			</view>
+		</block>
+	</view>
+</view>
+<view class="operate">
+	<view class="ope_add" bindtap="uploadImg">
+		<view class="imgCenter">
+			<image src="../../utils/static/add_1.png" mode="widthFix" />
+		</view>
+		<view>添加图片</view>
+	</view>
+	<view class="ope_add" bindtap="changeText">
+		<view class="imgCenter">
+			<image src="../../utils/static/add_2.png" mode="widthFix" />
+		</view>
+		<view>添加文字</view>
+	</view>
+	<view class="ope_raw" hover-class="clickHover" bindtap="showPoster">生成海报</view>
+</view>
+<view class="pop_bg" wx:if="{{isText}}" bindtap="changeText"></view>
+<view class="pop" wx:if="{{isText}}">
+	<view class="pop_title">{{isModify ? '修改文字' :'添加文字'}}</view>
+	<view class="pop_entry">
+		<input type="text" value="{{text}}" maxlength="15" focus placeholder="一行最多输入15个字" bindinput="inputText" />
+	</view>
+	<view class="pop_btn" hover-class="clickHover" bindtap="uploadText">确认</view>
+</view>
+<view class="pop_bg" wx:if="{{isPoster}}" bindtap="closePoster"></view>
+<view class="pop_main" wx:if="{{isPoster}}">
+	<view class="pop_pic" bindlongtap="saveImg">
+		<image src="{{poster}}" mode="widthFix"></image>
+	</view>
+	<view class='pop_btn' hover-class="clickHover" bindtap='saveImg'>保存到手机</view>
+</view>
+<canvas class='draw' canvas-id="maskCanvas" style='width:{{canvasWidth}}px; height:{{canvasHeight}}px;'></canvas>
